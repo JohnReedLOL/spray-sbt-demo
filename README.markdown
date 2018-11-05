@@ -44,7 +44,25 @@ lazy val simpleServer = (project in file("simpleServer")).settings(commonSetting
 lazy val root = (project in file(".")).aggregate(util, sprayCanDemo, simpleServer)
 ~~~~
 
-To compile all sub-projects and run a style-check on them:
+To compile all sub-projects and run a style-check on them, you can run this script:
+
+~~~~
+# This is not a properties file, it just has the .properties extension for syntax highlighting.
+# This is actually an sbt script. It does a style check by executing the following sbt commands:
+eval { println("Begin Script!") }
+scalastyle
+eval { println("Style Check Done!") }
+compile
+eval { println("Compile Done!") }
+# helloWorldTask was defined in build.sbt
+helloWorldTask
+eval { println("helloWorldTask Done!") }
+
+# You can run this script via the sbt shell command: < check_style_script.properties
+# For details, see: https://www.scala-sbt.org/0.13/docs/Command-Line-Reference.html
+~~~~
+
+Like so:
 
 ~~~~ 
 [IJ]> project root
