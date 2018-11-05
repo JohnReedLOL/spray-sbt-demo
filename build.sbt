@@ -67,7 +67,7 @@ lazy val sprayCanDemo = (project in file("sprayCanDemo")).settings(commonSetting
 lazy val simpleServer = (project in file("simpleServer")).settings(commonSettings).dependsOn(util)
 
 // root project is an aggregate of util, sprayCanDemo, and simpleServer. Calling "compile" on root compiles all the sub-projects.
-lazy val root = (project in file(".")).aggregate(util, sprayCanDemo, simpleServer)
+lazy val root = (project in file(".")).settings(commonSettings).aggregate(util, sprayCanDemo, simpleServer)
 
 // Now let's define some custom sbt settings and tasks
 // Note: A Setting just contains a value, a Task executes something and then returns a value
