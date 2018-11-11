@@ -1,6 +1,6 @@
 package spray.examples
 
-import akka.actor.{ActorRef, ActorSystem, Props}
+import akka.actor.{ ActorRef, ActorSystem, Props }
 import akka.io.IO
 import spray.can.Http
 

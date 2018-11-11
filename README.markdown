@@ -5,8 +5,8 @@ This is a demo project to cover the basics of Spray and the Scala Build Tool.
 This demo project consists of a root project with three sub-projects. You can take a look at them using the `projects` sbt command:
 
 ~~~~ 
-IJ]> projects
-[info] In file:/Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/
+[IJ]> projects
+[info] In file:/.../sbt-0.13/lesson/sbt-multi-project-example/
 [info] 	 * root
 [info] 	   simpleServer
 [info] 	   sprayCanDemo
@@ -16,10 +16,10 @@ IJ]> projects
 You can switch to one of the sub-projects like so:
 
 ~~~~ 
-[IJ]> project sprayCanDemo
-[info] Set current project to sprayCanDemo (in build file:/Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/)
+project sprayCanDemo
+[info] Set current project to sprayCanDemo (in build file:/.../sbt-0.13/lesson/sbt-multi-project-example/)
 [IJ]> projects
-[info] In file:/Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/
+[info] In file:/.../sbt-0.13/lesson/sbt-multi-project-example/
 [info] 	   root
 [info] 	   simpleServer
 [info] 	 * sprayCanDemo
@@ -44,77 +44,238 @@ lazy val simpleServer = (project in file("simpleServer")).settings(commonSetting
 lazy val root = (project in file(".")).aggregate(util, sprayCanDemo, simpleServer)
 ~~~~
 
-To compile all sub-projects and run a style-check on them, you can run this script:
+To compile all sub-projects, run a style-check, format the code, and test it, you can run this script:
 
 ~~~~
 # This is not a properties file, it just has the .properties extension for syntax highlighting.
-# This is actually an sbt script. It does a style check by executing the following sbt commands:
+# This is actually an sbt script. It executes the following commands:
 eval { println("Begin Script!") }
 scalastyle
 eval { println("Style Check Done!") }
 compile
 eval { println("Compile Done!") }
+scalafmt
+eval { println("Code Formatting Done!") }
+test:scalafmt
+eval { println("Test Formatting Done!") }
+sbt:scalafmt
+eval { println("sbt file Formatting Done!") }
+scalafmt::test
+test:scalafmt::test
+sbt:scalafmt::test
+eval { println("Done checking that everything is formatted correctly!") }
+test
+eval { println("Testing Done!") }
+assembly
+eval { println("Everything has been packaged into a launchable fat jar in the target/ folder!") }
 # helloWorldTask was defined in build.sbt
 helloWorldTask
 eval { println("helloWorldTask Done!") }
 
-# You can run this script via the sbt shell command: < check_style_script.properties
+# You can run this script via the sbt shell command: < style_check_compile_test_and_package.properties
 # For details, see: https://www.scala-sbt.org/0.13/docs/Command-Line-Reference.html
 ~~~~
 
 Like so:
 
 ~~~~ 
-[IJ]> project root
-[info] Set current project to root (in build file:/Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/)
-[IJ]> < check_style_script.properties
+project root
+[info] Set current project to sbt-multi-project-example (in build file:/Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/)
+< style_check_compile_test_and_package.properties
 Begin Script!
 [info] ans: Unit = null
-[info] scalastyle using config /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/scalastyle-config.xml
-[info] scalastyle using config /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/scalastyle-config.xml
-[info] scalastyle using config /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/scalastyle-config.xml
-[info] scalastyle using config /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/scalastyle-config.xml
+[info] scalastyle using config /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/scalastyle-config.xml
+[info] scalastyle using config /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/scalastyle-config.xml
+[info] scalastyle using config /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/scalastyle-config.xml
+[info] scalastyle using config /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/scalastyle-config.xml
 [info] scalastyle Processed 0 file(s)
 [info] scalastyle Found 0 errors
 [info] scalastyle Found 0 warnings
 [info] scalastyle Found 0 infos
-[info] scalastyle Finished in 10 ms
-[success] created output: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/target
+[info] scalastyle Finished in 24 ms
+[success] created output: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/target
 [info] scalastyle Processed 2 file(s)
 [info] scalastyle Found 0 errors
 [info] scalastyle Found 0 warnings
 [info] scalastyle Found 0 infos
-[info] scalastyle Finished in 4 ms
-[success] created output: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/sprayCanDemo/target
+[info] scalastyle Finished in 3 ms
+[success] created output: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/sprayCanDemo/target
 [info] scalastyle Processed 2 file(s)
 [info] scalastyle Found 0 errors
 [info] scalastyle Found 0 warnings
 [info] scalastyle Found 0 infos
 [info] scalastyle Finished in 0 ms
-[success] created output: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/util/target
+[success] created output: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/util/target
 [info] scalastyle Processed 4 file(s)
 [info] scalastyle Found 0 errors
 [info] scalastyle Found 0 warnings
 [info] scalastyle Found 0 infos
-[info] scalastyle Finished in 1 ms
-[success] created output: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/spray-template/simpleServer/target
-[success] Total time: 2 s, completed Nov 5, 2018 12:13:01 AM
+[info] scalastyle Finished in 3 ms
+[success] created output: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/simpleServer/target
+[success] Total time: 1 s, completed Nov 11, 2018 5:01:59 PM
 Style Check Done!
 [info] ans: Unit = null
-[success] Total time: 0 s, completed Nov 5, 2018 12:13:01 AM
+[success] Total time: 5 s, completed Nov 11, 2018 5:02:03 PM
 Compile Done!
+[info] ans: Unit = null
+[success] Total time: 1 s, completed Nov 11, 2018 5:02:04 PM
+Code Formatting Done!
+[info] ans: Unit = null
+[success] Total time: 1 s, completed Nov 11, 2018 5:02:05 PM
+Test Formatting Done!
+[info] ans: Unit = null
+[success] Total time: 1 s, completed Nov 11, 2018 5:02:06 PM
+sbt file Formatting Done!
+[info] ans: Unit = null
+[info] Checking formatting for 4 Scala sources in simpleServer:compile ...
+[info] Checking formatting for 2 Scala sources in util:compile ...
+[info] Checking formatting for 2 Scala sources in sprayCanDemo:compile ...
+[success] Total time: 6 s, completed Nov 11, 2018 5:02:12 PM
+[info] Checking formatting for 1 Scala source in sprayCanDemo:test ...
+[success] Total time: 1 s, completed Nov 11, 2018 5:02:13 PM
+[info] Checking formatting for 1 Scala source in util:sbt ...
+[info] Checking formatting for 1 Scala source in root:sbt ...
+[info] Checking formatting for 1 Scala source in simpleServer:sbt ...
+[info] Checking formatting for 1 Scala source in sprayCanDemo:sbt ...
+[success] Total time: 2 s, completed Nov 11, 2018 5:02:16 PM
+Done checking that everything is formatted correctly!
+[info] ans: Unit = null
+[DEBUG] [11/11/2018 17:02:18.630] [pool-150-thread-1] [EventStream(akka://com-example-MyServiceSpec)] logger log1-Logging$DefaultLogger started
+[DEBUG] [11/11/2018 17:02:18.633] [pool-150-thread-1] [EventStream(akka://com-example-MyServiceSpec)] Default Loggers started
+[DEBUG] [11/11/2018 17:02:19.408] [com-example-MyServiceSpec-akka.actor.default-dispatcher-4] [EventStream] shutting down: StandardOutLogger started
+[info] MyServiceSpec
+[info] 
+[info] MyService should
+[info] + return a greeting for GET requests to the root path
+[info] + leave GET requests to other paths unhandled
+[info] + return a MethodNotAllowed error for PUT requests to the root path
+[info] 
+[info] Total for specification MyServiceSpec
+[info] Finished in 336 ms
+[info] 3 examples, 0 failure, 0 error
+[info] Passed: Total 3, Failed 0, Errors 0, Passed 3
+[success] Total time: 3 s, completed Nov 11, 2018 5:02:19 PM
+Testing Done!
+[info] ans: Unit = null
+[info] Strategy 'discard' was applied to 7 files (Run the task at debug level to see details)
+[info] Strategy 'concat' was applied to a file (Run the task at debug level to see details)
+[info] Strategy 'discard' was applied to 10 files (Run the task at debug level to see details)
+[info] Strategy 'discard' was applied to a file (Run the task at debug level to see details)
+[info] Assembly up to date: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/util/target/scala-2.11/util-assembly-1.0.0.jar
+[info] Assembly up to date: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/target/scala-2.11/sbt-multi-project-example-1.0.0
+[info] Assembly up to date: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/simpleServer/target/scala-2.11/simpleServer.jar
+[DEBUG] [11/11/2018 17:02:25.749] [pool-152-thread-7] [EventStream(akka://com-example-MyServiceSpec)] logger log1-Logging$DefaultLogger started
+[DEBUG] [11/11/2018 17:02:25.755] [pool-152-thread-7] [EventStream(akka://com-example-MyServiceSpec)] Default Loggers started
+[DEBUG] [11/11/2018 17:02:26.757] [com-example-MyServiceSpec-akka.actor.default-dispatcher-4] [EventStream] shutting down: StandardOutLogger started
+[info] MyServiceSpec
+[info] 
+[info] MyService should
+[info] + return a greeting for GET requests to the root path
+[info] + leave GET requests to other paths unhandled
+[info] + return a MethodNotAllowed error for PUT requests to the root path
+[info] 
+[info] Total for specification MyServiceSpec
+[info] Finished in 326 ms
+[info] 3 examples, 0 failure, 0 error
+[info] Passed: Total 3, Failed 0, Errors 0, Passed 3
+[info] Strategy 'concat' was applied to a file (Run the task at debug level to see details)
+[info] Strategy 'discard' was applied to 10 files (Run the task at debug level to see details)
+[info] Assembly up to date: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/sprayCanDemo/target/scala-2.11/sprayCanDemo.jar
+[success] Total time: 8 s, completed Nov 11, 2018 5:02:27 PM
+Everything has been packaged into a launchable fat jar in the target/ folder!
 [info] ans: Unit = null
 [info] Build logger prints: Hello
 [info] World!
-[success] Total time: 0 s, completed Nov 5, 2018 12:13:01 AM
+[success] Total time: 0 s, completed Nov 11, 2018 5:02:28 PM
 helloWorldTask Done!
 [info] ans: Unit = null
-[IJ]> 
 ~~~~ 
 
-The above sbt script is located in `check_style_script.properties`. 
+The above sbt script is located in `style_check_compile_test_and_package.properties`. 
 
-This script runs a task, `helloWorldTask`, that we defined in the build.sbt file:
+Note that when you run the script in the root project, sbt-assembly tries to create one big fat jar.
+
+This doesn't make much sense because each sub-project (with the exception of `util`) has its own main and we want one jar per sub-project, not one jar for everything.
+
+Let's make an executable jar for just the `sprayCanDemo` sub-project:
+
+~~~~
+projects
+[info] In file:/Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/
+[info] 	 * root
+[info] 	   simpleServer
+[info] 	   sprayCanDemo
+[info] 	   util
+[IJ]> project sprayCanDemo
+[info] Set current project to sprayCanDemo (in build file:/Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/)
+[IJ]> assembly
+[DEBUG] [11/11/2018 16:33:28.413] [pool-200-thread-4] [EventStream(akka://com-example-MyServiceSpec)] logger log1-Logging$DefaultLogger started
+[DEBUG] [11/11/2018 16:33:28.415] [pool-200-thread-4] [EventStream(akka://com-example-MyServiceSpec)] Default Loggers started
+[DEBUG] [11/11/2018 16:33:29.203] [com-example-MyServiceSpec-akka.actor.default-dispatcher-3] [EventStream] shutting down: StandardOutLogger started
+[info] MyServiceSpec
+[info] 
+[info] MyService should
+[info] + return a greeting for GET requests to the root path
+[info] + leave GET requests to other paths unhandled
+[info] + return a MethodNotAllowed error for PUT requests to the root path
+[info] 
+[info] Total for specification MyServiceSpec
+[info] Finished in 342 ms
+[info] 3 examples, 0 failure, 0 error
+[info] Passed: Total 3, Failed 0, Errors 0, Passed 3
+[info] Strategy 'concat' was applied to a file (Run the task at debug level to see details)
+[info] Strategy 'discard' was applied to 10 files (Run the task at debug level to see details)
+[info] Assembly up to date: /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/sprayCanDemo/target/scala-2.11/sprayCanDemo.jar
+[success] Total time: 6 s, completed Nov 11, 2018 4:33:31 PM
+~~~~
+
+Now let's run the jar from the (Linux/Cygwin/Mac) terminal. 
+
+Go into the directory where the jar is:
+
+> cd /Users/john-michaelreed/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/sprayCanDemo/target/scala-2.11/
+
+And run it:
+
+> java -jar sprayCanDemo.jar
+
+And this is what you get:
+
+~~~~
+MyComputer username$ cd /Users/username/Downloads/NewDownloads/sbt-0.13/lesson/sbt-multi-project-example/sprayCanDemo/target/scala-2.11/
+MyComputer username$ java -version
+java version "1.8.0_181"
+Java(TM) SE Runtime Environment (build 1.8.0_181-b13)
+Java HotSpot(TM) 64-Bit Server VM (build 25.181-b13, mixed mode)
+MyComputer username$ java -jar sprayCanDemo.jar
+[DEBUG] [11/11/2018 16:39:17.272] [main] [EventStream(akka://on-spray-can)] logger log1-Logging$DefaultLogger started
+[DEBUG] [11/11/2018 16:39:17.273] [main] [EventStream(akka://on-spray-can)] Default Loggers started
+16:39:17.755 [main] INFO  - result: List(scala.concurrent.impl.CallbackRunnable@5d7148e2) - com.example.Boot(Boot.scala:27)
+16:39:17.758 [main] ERROR  - This is a test log!!! - com.example.Boot(Boot.scala:28)
+[DEBUG] [11/11/2018 16:39:18.633] [on-spray-can-akka.actor.default-dispatcher-2] [akka://on-spray-can/user/IO-HTTP/listener-0] Binding to localhost/127.0.0.1:8080
+[DEBUG] [11/11/2018 16:39:18.744] [on-spray-can-akka.actor.default-dispatcher-4] [akka://on-spray-can/system/IO-TCP/selectors/$a/0] Successfully bound to /127.0.0.1:8080
+[INFO] [11/11/2018 16:39:18.747] [on-spray-can-akka.actor.default-dispatcher-2] [akka://on-spray-can/user/IO-HTTP/listener-0] Bound to localhost/127.0.0.1:8080
+[DEBUG] [11/11/2018 16:39:31.968] [on-spray-can-akka.actor.default-dispatcher-2] [akka://on-spray-can/system/IO-TCP/selectors/$a/0] New connection accepted
+[DEBUG] [11/11/2018 16:39:32.134] [on-spray-can-akka.actor.default-dispatcher-4] [akka://on-spray-can/user/IO-HTTP/listener-0/0] Dispatching GET request to http://127.0.0.1:8080/ to handler Actor[akka://on-spray-can/system/IO-TCP/selectors/$a/1#1874233303]
+~~~~
+
+Navigate to: `http://127.0.0.1:8080/`
+
+You should see this:
+
+~~~~
+Say hello to spray-routing on spray-can!
+~~~~
+
+Cool, you can package the code as a stand-alone jar that you can run with a simple "java -jar" command.
+
+Note that you will have to change a parameter in the build.sbt file if you want to run it in a Windows environment - it defaults to Linux/Cygwin/Mac.
+
+#### sbt Tasks and Settings
+
+Now let's talk about sbt Tasks and Settings.
+
+The script runs a task, `helloWorldTask`, that we defined in the build.sbt file:
 
 ~~~~ 
 // Note: A Setting just contains a value, a Task executes something and then returns a value
@@ -147,6 +308,10 @@ helloWorldTask in Scope.GlobalScope := {
 ~~~~ 
 
 If you have ever used ant or rake, sbt tasks are kind of like that.
+
+Note that sbt tasks can import and use library code just like your regular source code can.
+
+See: https://stackoverflow.com/questions/34828688/how-can-i-use-a-library-dependency-in-the-definition-of-an-sbt-task
 
 You can inspect each of these definitions from the sbt shell like so:
 
@@ -212,6 +377,8 @@ And you can execute them like so:
 [info] World!
 [success] Total time: 0 s, completed Nov 5, 2018 12:54:29 AM
 ~~~~ 
+
+#### Running the sub-projects
 
 Now, the three sub-projects are `util`, `sprayCanDemo`, and `simpleServer`:
 
@@ -342,6 +509,17 @@ Test file upload
 ~~~~
 
 Remember to do `re-stop` or else the background application will not terminate.
+
+Note that `simpleServer` actually has more functionality than `sprayCanDemo`. For example, to change `simpleServer` from http to https, all you have to do is go into the `simpleServer` sub-project's resources/application.conf file and change this value:
+
+~~~~
+spray.can.server {
+  # uncomment the next line for making this an HTTPS example
+  # ssl-encryption = on // uses spray/examples/MySslConfiguration.scala
+  // Note: When I configure Spray to HTTPS, it cant accept HTTP requests, only HTTPS requests.
+~~~~
+
+#### Using git from sbt
 
 You can run Git commands from the IntelliJ sbt shell because the `sbt-git` plugin is in the `project/plugins.sbt` file:
 

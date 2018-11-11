@@ -28,8 +28,8 @@ class DemoService extends Actor with ActorLogging {
       sender ! HttpResponse(entity = "PONG!")
 
     case HttpRequest(GET, Uri.Path("/stream"), _, _, _) =>
-      val peer: ActorRef = sender // since the Props creator is executed asyncly we need to save the sender ref
-      val result1: ActorRef = context actorOf Props(new Streamer(client = peer, count = 25))
+      val peer: ActorRef    = sender // since the Props creator is executed asyncly we need to save the sender ref
+      val result1: ActorRef = context actorOf Props(new Streamer(client = peer, count = 15))
 
     case HttpRequest(GET, Uri.Path("/server-stats"), _, _, _) =>
       val client: ActorRef = sender
@@ -38,7 +38,8 @@ class DemoService extends Actor with ActorLogging {
       }
 
     case HttpRequest(GET, Uri.Path("/crash"), _, _, _) =>
-      sender ! HttpResponse(entity = "About to throw an exception in the request handling actor, " +
+      sender ! HttpResponse(
+        entity = "About to throw an exception in the request handling actor, " +
         "which triggers an actor restart")
       sys.error("BOOM!")
 
@@ -50,25 +51,28 @@ class DemoService extends Actor with ActorLogging {
       sender ! Http.Close
       val result2: Cancellable = context.system.scheduler.scheduleOnce(1.second) { context.system.shutdown() }
 
-    case r@HttpRequest(POST, Uri.Path("/file-upload"), headers, entity: HttpEntity.NonEmpty, protocol) =>
+    case r @ HttpRequest(POST, Uri.Path("/file-upload"), headers, entity: HttpEntity.NonEmpty, protocol) =>
       // emulate chunked behavior for POST requests to this path
       val parts: Stream[HttpMessagePart] = r.asPartStream()
-      val client: ActorRef = sender
+      val client: ActorRef               = sender
       @SuppressWarnings(Array("org.wartremover.warts.AsInstanceOf")) // You can use an exhaustive match instead of asInstanceOf
-      val handler: ActorRef = context.actorOf(Props(new FileUploadHandler(client, parts.head.asInstanceOf[ChunkedRequestStart])))
+      val handler: ActorRef =
+        context.actorOf(Props(new FileUploadHandler(client, parts.head.asInstanceOf[ChunkedRequestStart])))
       import scala.language.postfixOps
       parts.tail.foreach(handler !) // "handler !" is a postfix operator
 
-    case s@ChunkedRequestStart(HttpRequest(POST, Uri.Path("/file-upload"), _, _, _)) =>
-      val client: ActorRef = sender
+    case s @ ChunkedRequestStart(HttpRequest(POST, Uri.Path("/file-upload"), _, _, _)) =>
+      val client: ActorRef  = sender
       val handler: ActorRef = context.actorOf(Props(new FileUploadHandler(client, s)))
       sender ! RegisterChunkHandler(handler)
 
     case _: HttpRequest => sender ! HttpResponse(status = 404, entity = "Unknown resource!")
 
+    // This is what we get when we timeout at: http://127.0.0.1:8080/timeout/timeout
     case Timedout(HttpRequest(_, Uri.Path("/timeout/timeout"), _, _, _)) =>
       log.info("Dropping Timeout message")
 
+    // This is what we get when we timeout at: http://127.0.0.1:8080/timeout
     case Timedout(HttpRequest(method, uri, _, _, _)) =>
       sender ! HttpResponse(
         status = 500,
@@ -79,7 +83,8 @@ class DemoService extends Actor with ActorLogging {
   ////////////// helpers //////////////
 
   lazy val index = HttpResponse(
-    entity = HttpEntity(`text/html`,
+    entity = HttpEntity(
+      `text/html`,
       <html>
         <body>
           <h1>Say hello to <i>spray-can</i>!</h1>
@@ -105,7 +110,8 @@ class DemoService extends Actor with ActorLogging {
   )
 
   def statsPresentation(s: Stats): HttpResponse = HttpResponse(
-    entity = HttpEntity(`text/html`,
+    entity = HttpEntity(
+      `text/html`,
       <html>
         <body>
           <h1>HttpServer Stats</h1>

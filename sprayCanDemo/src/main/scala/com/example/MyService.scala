@@ -1,6 +1,6 @@
 package com.example
 
-import akka.actor.{Actor, ActorContext}
+import akka.actor.{ Actor, ActorContext }
 import spray.routing._
 import spray.http._
 import MediaTypes._

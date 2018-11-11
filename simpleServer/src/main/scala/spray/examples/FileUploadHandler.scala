@@ -3,9 +3,9 @@ package spray.examples
 import akka.actor._
 
 import scala.concurrent.duration._
-import java.io.{File, FileInputStream, FileOutputStream, InputStream}
+import java.io.{ File, FileInputStream, FileOutputStream, InputStream }
 
-import org.jvnet.mimepull.{MIMEMessage, MIMEPart}
+import org.jvnet.mimepull.{ MIMEMessage, MIMEPart }
 import spray.http._
 import MediaTypes._
 import HttpHeaders._
@@ -24,7 +24,8 @@ class FileUploadHandler(client: ActorRef, start: ChunkedRequestStart) extends Ac
   val tmpFile: File = File.createTempFile("chunked-receiver", ".tmp", new File("/tmp"))
   tmpFile.deleteOnExit()
   val output = new FileOutputStream(tmpFile)
-  val Some(HttpHeaders.`Content-Type`(ContentType(multipart: MultipartMediaType, _))) = header[HttpHeaders.`Content-Type`]
+  val Some(HttpHeaders.`Content-Type`(ContentType(multipart: MultipartMediaType, _))) =
+    header[HttpHeaders.`Content-Type`]
   val boundary = multipart.parameters("boundary")
 
   log.info(s"Got start of chunked request $method $uri with multipart boundary '$boundary' writing to $tmpFile")
@@ -56,7 +57,8 @@ class FileUploadHandler(client: ActorRef, start: ChunkedRequestStart) extends Ac
     // properly
     val parts: mutable.Buffer[MIMEPart] = message.getAttachments.asScala
 
-    HttpEntity(`text/html`,
+    HttpEntity(
+      `text/html`,
       <html>
         <body>
           <p>Got {bytesWritten} bytes</p>
@@ -86,8 +88,7 @@ class FileUploadHandler(client: ActorRef, start: ChunkedRequestStart) extends Ac
       val read: Int = is.read(buffer)
       if (read > 0) {
         inner(cur + read)
-      }
-      else {
+      } else {
         cur
       }
     }

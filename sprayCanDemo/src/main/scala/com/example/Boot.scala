@@ -1,10 +1,10 @@
 package com.example
 
-import akka.actor.{ActorSystem, Props}
+import akka.actor.{ ActorSystem, Props }
 import akka.io.IO
 import akka.pattern.ask
 import akka.util.Timeout
-import com.typesafe.scalalogging.{TraceLogger, TraceLogging}
+import com.typesafe.scalalogging.{ TraceLogger, TraceLogging }
 import spray.can.Http
 
 import scala.concurrent.Future
@@ -22,7 +22,7 @@ object Boot extends App with TraceLogging {
   implicit val timeout: Timeout = Timeout(5.seconds)
 
   // start a new HTTP server on port 8080 with our service actor as the handler
-  val result: Future[Any] = IO(Http) ? Http.Bind(service, interface = "localhost", port = 8080)
+  val result: Future[Any]   = IO(Http) ? Http.Bind(service, interface = "localhost", port = 8080)
   val myLogger: TraceLogger = logger
   myLogger.info(s"result: $result")
   myLogger.error("This is a test log!!!")

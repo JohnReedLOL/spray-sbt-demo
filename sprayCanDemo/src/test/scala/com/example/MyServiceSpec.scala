@@ -8,7 +8,7 @@ import akka.actor.ActorSystem
 
 class MyServiceSpec extends Specification with Specs2RouteTest with MyService {
   def actorRefFactory: ActorSystem = system
-  
+
   "MyService" should {
 
     "return a greeting for GET requests to the root path" in {
